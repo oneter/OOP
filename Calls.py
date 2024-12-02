@@ -6,7 +6,7 @@ from datetime import date
 class BriefSubscriber:
     """Класс для краткой информации об абоненте."""
 
-    def __init__(self, subscriber_id: int, name: str, phone: str):
+    def __init__(self, subscriber_id: int = 0, name: str, phone: str):
         self.subscriber_id = subscriber_id
         self.name = name
         self.phone = phone
