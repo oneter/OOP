@@ -15,13 +15,8 @@ class BriefSubscriber:
         if not isinstance(other, BriefSubscriber):
             return False
         return (
-            self.subscriber_id == other.subscriber_id and
-            self.name == other.name and
             self.phone == other.phone
         )
-
-    def __hash__(self):
-        return hash((self.subscriber_id, self.name, self.phone))
 
     def __str__(self):
         return f"BriefSubscriber(subscriberId={self.subscriber_id}, name='{self.name}', phone='{self.phone}')"
