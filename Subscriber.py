@@ -21,6 +21,36 @@ class BriefSubscriber:
     def __str__(self):
         return f"BriefSubscriber(subscriberId={self.subscriber_id}, name='{self.name}', phone='{self.phone}')"
 
+    @property
+    def subscriber_id(self) -> int:
+        return self.__subscriber_id
+
+    @subscriber_id.setter
+    def subscriber_id(self, value: int):
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("subscriber_id должен быть положительным числом.")
+        self.__subscriber_id = value
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @name.setter
+    def name(self, value: str):
+        if not value:
+            raise ValueError("Имя не может быть пустым.")
+        self.__name = value
+
+    @property
+    def phone(self) -> str:
+        return self.__phone
+
+    @phone.setter
+    def phone(self, value: str):
+        if len(value) < 11 or not value.isdigit():
+            raise ValueError("Номер телефона должен состоять из 11 цифр.")
+        self.__phone = value
+
 
 class Subscriber(BriefSubscriber):
     """Класс для полной информации об абоненте."""
