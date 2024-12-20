@@ -1,0 +1,11 @@
+- subscriber_id: 1
+  name: "ООО Ромашка"
+  inn: "1234567890"
+  account: "123456789012"
+  phone: "89001234567"
+
+- subscriber_id: 2
+  name: "ООО Василек"
+  inn: "1122334455"
+  account: "556677889900"
+  phone: "89003456789"
