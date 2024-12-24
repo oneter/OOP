@@ -1,60 +1,74 @@
-import os
 import yaml
-from decimal import Decimal
-from SubscriberRepository import SubscriberRepository
-from SubscriberRepositoryStrategy import SubscriberRepFileStrategy
-from Subscriber import Subscriber  # Импортируем класс Subscriber
+import os
+from Subscriber import Subscriber
 
-class YamlSubscriberRepFileStrategy(SubscriberRepFileStrategy):
+class SubscriberRepYaml:
+
     def __init__(self, file_path: str):
         self.file_path = file_path
 
-    def read(self):
+    def _read_file(self):
         if not os.path.exists(self.file_path):
             return []
         with open(self.file_path, 'r', encoding='utf-8') as file:
             return yaml.safe_load(file) or []
 
-    def write(self, data):
+    def _write_file(self, data):
         with open(self.file_path, 'w', encoding='utf-8') as file:
-            yaml.dump(data, file, allow_unicode=True, default_flow_style=False)
+            yaml.safe_dump(data, file, allow_unicode=True)
 
-    def add(self, subscriber):
-        data = self.read()
-        data.append(subscriber.to_dict())
-        self.write(data)
+    def get_all(self):
+        return [Subscriber.from_dict(item) for item in self._read_file()]
 
-    def display(self):
-        data = self.read()
-        for item in data:
-            print(item)
+    def save_all(self, subscribers):
+        self._write_file([subscriber.to_dict() for subscriber in subscribers])
 
-# Инициализация стратегии YAML
-strategy = YamlSubscriberRepFileStrategy('subscribers.yaml')
+    def get_by_id(self, subscriber_id):
+        subscribers = self.get_all()
+        for subscriber in subscribers:
+            if subscriber.subscriber_id == subscriber_id:
+                return subscriber
+        return None
 
-# Чтение данных из файла и отображение их
-print("Current subscribers in YAML file:")
-strategy.display()
+    def get_k_n_short_list(self, k, n):
+        subscribers = self.get_all()
+        start_index = k * n
+        end_index = start_index + n
+        return subscribers[start_index:end_index]
 
-# Создание репозитория с использованием стратегии YAML
-yaml_repository = SubscriberRepository(strategy)
+    def sort_by_field(self, field):
+        subscribers = self.get_all()
+        subscribers.sort(key=lambda x: getattr(x, field))
+        self.save_all(subscribers)
 
-# Создание нового продукта
-new_subscriber = Subscriber.create_new_product(
-    product_id= 3,
-    name="Продук",
-    description="Описание продукта",
-    price=Decimal('19.99'),
-    stock_quantity=100,
-    material="Пластик",
-    product_code="5890000"
-)
+    def add_subscriber(self, name, inn, account, phone):
+        subscribers = self.get_all()
+        new_id = max((subscriber.subscriber_id for subscriber in subscribers), default=0) + 1
+        new_subscriber = Subscriber(new_id, name, inn, account, phone)
+        subscribers.append(new_subscriber)
+        self.save_all(subscribers)
+        return new_subscriber
 
+    def update_subscriber(self, subscriber_id, name=None, inn=None, account=None, phone=None):
+        subscribers = self.get_all()
+        for subscriber in subscribers:
+            if subscriber.subscriber_id == subscriber_id:
+                if name is not None:
+                    subscriber.name = name
+                if inn is not None:
+                    subscriber.inn = inn
+                if account is not None:
+                    subscriber.account = account
+                if phone is not None:
+                    subscriber.phone = phone
+                self.save_all(subscribers)
+                return subscriber
+        return None
 
-yaml_repository.add_subscriber(new_subscriber)
+    def delete_subscriber(self, subscriber_id):
+        subscribers = self.get_all()
+        subscribers = [subscriber for subscriber in subscribers if subscriber.subscriber_id != subscriber_id]
+        self.save_all(subscribers)
 
-yaml_repository.write_data()
-
-# Отображение обновленного списка продуктов
-print("\nUpdated subscribers in YAML file:")
-strategy.display()
+    def get_count(self):
+        return len(self.get_all())
