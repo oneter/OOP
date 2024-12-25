@@ -21,7 +21,7 @@ class Subscriber(BriefSubscriber):
         self.inn = inn
         self.account = account
 
-    # Геттеры и сеттеры с валидацией
+    # ГѓГҐГІГІГҐГ°Г» ГЁ Г±ГҐГІГІГҐГ°Г» Г± ГўГ Г«ГЁГ¤Г Г¶ГЁГҐГ©
     @property
     def inn(self):
         return self._inn
@@ -29,7 +29,7 @@ class Subscriber(BriefSubscriber):
     @inn.setter
     def inn(self, value: str):
         if not value.isdigit() or len(value) != 10:
-            raise ValueError("ИНН должен содержать 10 цифр.")
+            raise ValueError("Г€ГЌГЌ Г¤Г®Г«Г¦ГҐГ­ Г±Г®Г¤ГҐГ°Г¦Г ГІГј 10 Г¶ГЁГґГ°.")
         self._inn = value
 
     @property
@@ -39,10 +39,10 @@ class Subscriber(BriefSubscriber):
     @account.setter
     def account(self, value: str):
         if not value.isdigit() or len(value) < 10:
-            raise ValueError("Номер счета должен содержать не менее 10 цифр.")
+            raise ValueError("ГЌГ®Г¬ГҐГ° Г±Г·ГҐГІГ  Г¤Г®Г«Г¦ГҐГ­ Г±Г®Г¤ГҐГ°Г¦Г ГІГј Г­ГҐ Г¬ГҐГ­ГҐГҐ 10 Г¶ГЁГґГ°.")
         self._account = value
 
-    # Методы создания объектов
+    # ГЊГҐГІГ®Г¤Г» Г±Г®Г§Г¤Г Г­ГЁГї Г®ГЎГєГҐГЄГІГ®Гў
     @classmethod
     def create_new_subscriber(cls, name: str, inn: str, account: str, phone: str):
         return cls(name=name, inn=inn, account=account, phone=phone)
@@ -92,6 +92,15 @@ class Subscriber(BriefSubscriber):
             inn=data['inn'],
             account=data['account']
         )
+     
+    def to_dict(self) -> dict:
+        return {
+            "subscriber_id": self.subscriber_id,
+            "name": self.name,
+            "phone": self.phone,
+            "inn": self.inn,
+            "account": self.account
+        }
     
     @classmethod
     def create_from_yaml(cls, yaml_string: str):
@@ -113,14 +122,7 @@ class Subscriber(BriefSubscriber):
             'account': self.account
         }, allow_unicode=True)
 
-    def to_dict(self) -> dict:
-        return {
-            "subscriber_id": self.subscriber_id,
-            "name": self.name,
-            "phone": self.phone,
-            "inn": self.inn,
-            "account": self.account
-        }
+
     
     def __str__(self):
         return (f"Subscriber(subscriberId={self.subscriber_id}, name='{self.name}', inn='{self.inn}', "
