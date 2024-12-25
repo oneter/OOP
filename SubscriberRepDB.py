@@ -1,8 +1,6 @@
 from decimal import Decimal
 from typing import List
 from Subscriber import Subscriber
-from pymysql import MySQLError
-from DBConnection import DBConnection
 
 class SubscriberRepDB:
     def __init__(self, host, user, password, database, port=3306):
@@ -88,13 +86,3 @@ class SubscriberRepDB:
 
     def close(self):
         self.db.close()
-
-new_product = Subscriber.create_new_subscriber(
-    name="OOO Василёк",
-    phone="89005678901",
-    inn="1234567890123435",
-    account="3243235325325"
-)
-db = DBConnection(host='localhost', user='root', password='11062003', database='subscribers ', port=3306)
-subscriber_repo = SubscriberRepDB(host="localhost", user="root", password="11062003", database="subscribers", port=3306)
-subscriber_repo.delete_by_id(1)
