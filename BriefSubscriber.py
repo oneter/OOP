@@ -26,7 +26,7 @@ class BriefSubscriber:
     @subscriber_id.setter
     def subscriber_id(self, value: int):
         if not isinstance(value, int) or value < 0:
-            raise ValueError("subscriber_id äîëæåí áûòü ïîëîæèòåëüíûì ÷èñëîì.")
+            raise ValueError("subscriber_id Ð´Ð¾Ð»Ð¶ÐµÐ½ Ð±Ñ‹Ñ‚ÑŒ Ð½ÐµÐ¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ð¼ Ñ‡Ð¸ÑÐ»Ð¾Ð¼.")
         self.__subscriber_id = value
 
     @property
@@ -36,7 +36,7 @@ class BriefSubscriber:
     @name.setter
     def name(self, value: str):
         if not value:
-            raise ValueError("Èìÿ íå ìîæåò áûòü ïóñòûì.")
+            raise ValueError("Ð˜Ð¼Ñ Ð½Ðµ Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð±Ñ‹Ñ‚ÑŒ Ð¿ÑƒÑÑ‚Ñ‹Ð¼.")
         self.__name = value
 
     @property
@@ -46,5 +46,5 @@ class BriefSubscriber:
     @phone.setter
     def phone(self, value: str):
         if len(value) < 11 or not value.isdigit():
-            raise ValueError("Íîìåð òåëåôîíà äîëæåí ñîñòîÿòü èç 11 öèôð.")
+            raise ValueError("ÐÐ¾Ð¼ÐµÑ€ Ñ‚ÐµÐ»ÐµÑ„Ð¾Ð½Ð° Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑÐ¾Ð´ÐµÑ€Ð¶Ð°Ñ‚ÑŒ Ð¼Ð¸Ð½Ð¸Ð¼ÑƒÐ¼ 11 Ñ†Ð¸Ñ„Ñ€.")
         self.__phone = value
