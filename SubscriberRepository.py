@@ -56,18 +56,10 @@ class SubscriberRepository:
 
     def subscriber_replace_by_id(self, subscriber_id: int, name=None, phone=None, inn=None, account=None):
         # Получаем данные абонента по ID
-        subscriber_data = self.get_by_id(subscriber_id)
-        if not subscriber_data:
+        subscriber = self.get_by_id(subscriber_id)
+        if not subscriber:
             raise ValueError(f"Subscriber with ID {subscriber_id} not found.")
 
-        # Создаём объект Subscriber из данных найденного абонента
-        subscriber = Subscriber.create_from_dict(subscriber_data)
-
-        # Проверяем уникальность
-        if not self.check_unique_code(subscriber.to_dict(), subscriber_data):
-            raise ValueError("Subscriber already exists.")
-
-        # Обновляем поля объекта Subscriber
         if name:
             subscriber.name = name
         if phone:
@@ -77,7 +69,6 @@ class SubscriberRepository:
         if account:
             subscriber.account = account
 
-    # Обновляем данные в списке
         for i, s in enumerate(self._data):
             if s['subscriber_id'] == subscriber_id:
                 self._data[i] = subscriber.to_dict()
