@@ -3,23 +3,18 @@ import json
 import os
 from Subscriber import Subscriber
 from BriefSubscriber import BriefSubscriber
+from SubscriberRepFileStrategy import SubscriberRepFileStrategy
 
 class SubscriberRepository:
 
-    def __init__(self, file_path: str):
-        self.file_path = file_path
-
-    def _read_file(self):
-        raise NotImplementedError("Метод должен быть реализован в подклассе")
-
-    def _write_file(self, data):
-        raise NotImplementedError("Метод должен быть реализован в подклассе")
+    def __init__(self, strategy: SubscriberRepFileStrategy):
+        self.strategy = strategy
 
     def get_all(self):
-        return [Subscriber.from_dict(item) for item in self._read_file()]
+        return [Subscriber.from_dict(item) for item in self.strategy.read()]
 
     def save_all(self, subscribers):
-        self._write_file([subscriber.to_dict() for subscriber in subscribers])
+        self.strategy.write([subscriber.to_dict() for subscriber in subscribers])
 
     def get_by_id(self, subscriber_id):
         subscribers = self.get_all()
@@ -70,3 +65,4 @@ class SubscriberRepository:
 
     def get_count(self):
         return len(self.get_all())
+
